@@ -1,0 +1,58 @@
+<html>
+
+	<head>
+		<script type="text/javascript" src="js/jquery-1.9.0.min.js"></script>
+		<script type="text/javascript">
+			$(function() {
+			    sayHi();
+			});
+			function sayHi() {
+				var urll = "http://despscrap.messige.com/check.php";
+				// var urll = "http://localhost:8888/check.php";
+				console.log('checking on '+urll);
+			  $.ajax({
+			       // url:"http://172.16.1.175:8888/data/tracks.php?callback=cb&s="+s,
+			       url:urll,
+			       // url:"http://localhost:8888/check.php",
+			       dataType: 'jsonp', // Notice! JSONP <-- P (lowercase)
+			       success:function(data){
+			       		var email = data.email;
+			       		
+			       		console.log(email);
+
+			       		if(email.indexOf("<")>=0){
+			       			email = email.substring(email.indexOf("<")+1, email.length-1);
+			       		}
+
+
+			       		var cmd =  data.cmd;
+			       		console.log("email after");
+			       		console.log(email);
+			       		console.log(cmd);
+			       		$.ajax({
+					       // run on localhost
+						       url:"http://localhost:8888/getemail.php?e="+email+"&cmd="+cmd,
+						       success:function(data){
+						       		console.log('came back from localhost');
+						       		console.log(data);
+						       },
+						       error:function(){
+						           console.log('inner error');
+						       },
+						  });
+			       },
+			       error:function(){
+			           console.log('outer error');
+			       },
+			  });
+
+			  setTimeout(sayHi,1000);
+			  console.log('x');
+			}
+		</script>
+	</head>
+	<body>
+
+	</body>
+
+</html>
